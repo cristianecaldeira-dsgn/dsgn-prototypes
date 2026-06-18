@@ -133,8 +133,24 @@
       box-shadow: var(--shadow-card);
       width: calc(100% - 2 * var(--space-4));
     }
+    #home-search-pill {
+      justify-content: flex-start;
+      gap: 13px;
+    }
     .search-pill img { width: 22px; height: 22px; flex-shrink: 0; }
     .search-pill span { flex: 1; color: var(--color-placeholder); font-size: var(--text-body-sm); text-align: left; }
+    #home-search-pill > span:not([aria-hidden="true"]) {
+      width: 100%;
+      min-width: 206px;
+    }
+    #home-search-pill > span[aria-hidden="true"] {
+      display: flex;
+      flex-flow: row;
+      justify-content: flex-start;
+      align-items: flex-end;
+      gap: 0;
+      width: 100%;
+    }
     .h-scroll {
       display: flex;
       gap: var(--space-3);
