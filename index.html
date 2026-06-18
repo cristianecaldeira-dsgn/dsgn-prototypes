@@ -24,6 +24,13 @@
       --color-page-outside: #0a0a0a;
       --color-border-subtle: #e6ebe7;
       --color-placeholder: #6b7280;
+      --color-cep-text: #3b8748;
+      --color-search-placeholder: #aaaaaa;
+      --color-border-search: #e8e8e8;
+      --color-badge-extended-bg: #fdcf8a;
+      --color-badge-extended-text: #0c0d0d;
+      --color-tag-diamond-bg: #a95d7d;
+      --color-tag-lancamentos: #2a87be;
       --dsgb-state-hover-opacity: 0.08;
       --dsgb-state-focus-ring: 2px solid color-mix(in srgb, var(--color-actionable-default) 35%, transparent);
       --font-body: "IBM Plex Sans", system-ui, sans-serif;
@@ -89,24 +96,49 @@
       padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
     }
     .status-bar {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
+      gap: var(--space-2);
       padding: var(--space-2) var(--space-4);
       padding-top: max(var(--space-2), env(safe-area-inset-top));
+      min-height: 36px;
       font-size: var(--text-sm);
       font-weight: 600;
       font-family: var(--font-heading);
+      color: var(--color-non-interactive-predominant);
       background: var(--color-bg-primary);
     }
-    .status-bar__icons { display: flex; align-items: center; gap: var(--space-2); }
-    .status-bar__icons img { display: block; height: 14px; width: auto; }
+    .status-bar__time {
+      justify-self: start;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .status-bar__notch {
+      justify-self: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-non-interactive-predominant);
+      flex-shrink: 0;
+    }
+    .status-bar__icons {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      min-width: 0;
+    }
     .top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: var(--space-2) var(--space-4) var(--space-3);
       gap: var(--space-2);
+    }
+    #screen-home #home-back-btn {
+      display: none;
     }
     .cep {
       display: flex;
@@ -115,7 +147,7 @@
       font-family: var(--font-heading);
       font-weight: 600;
       font-size: var(--text-md);
-      color: var(--color-actionable-default);
+      color: var(--color-cep-text);
     }
     .cep img { width: 18px; height: 18px; }
     .header-actions { display: flex; align-items: center; gap: var(--space-4); }
@@ -136,20 +168,22 @@
     #home-search-pill {
       justify-content: flex-start;
       gap: 13px;
+      background: var(--color-bg-primary);
+      border-color: var(--color-border-search);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
     .search-pill img { width: 22px; height: 22px; flex-shrink: 0; }
     .search-pill span { flex: 1; color: var(--color-placeholder); font-size: var(--text-body-sm); text-align: left; }
     #home-search-pill > span:not([aria-hidden="true"]) {
-      width: 100%;
-      min-width: 206px;
+      flex: 1 1 auto;
+      min-width: 0;
+      color: var(--color-search-placeholder);
     }
     #home-search-pill > span[aria-hidden="true"] {
       display: flex;
-      flex-flow: row;
-      justify-content: flex-start;
-      align-items: flex-end;
-      gap: 0;
-      width: 100%;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: flex-end;
     }
     .h-scroll {
       display: flex;
@@ -173,18 +207,25 @@
     .quick-card--tag .quick-card__badge {
       position: absolute;
       top: var(--space-2);
-      left: 50%;
-      transform: translateX(-50%);
+      right: var(--space-2);
+      left: auto;
+      transform: none;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 600;
       font-family: var(--font-heading);
-      background: #fff3d6;
-      color: #8a5a00;
+      background: var(--color-badge-extended-bg);
+      color: var(--color-badge-extended-text);
       padding: 2px 6px;
       border-radius: var(--radius-sm);
     }
     .quick-card img { width: 28px; height: 28px; margin: var(--space-4) auto var(--space-2); display: block; }
-    .quick-card p { margin: 0; font-size: var(--text-xs); font-weight: 500; font-family: var(--font-heading); }
+    .quick-card p {
+      margin: 0;
+      font-size: var(--text-xs);
+      font-weight: 500;
+      font-family: var(--font-heading);
+      color: var(--color-non-interactive-predominant);
+    }
     .cat-row { margin-bottom: var(--space-6); }
     .cat-item { flex: 0 0 72px; text-align: center; }
     .cat-circle {
@@ -199,32 +240,120 @@
       background: var(--color-bg-primary);
     }
     .cat-circle img { width: 26px; height: 26px; }
-    .cat-item span { font-size: var(--text-xs); font-weight: 500; color: var(--color-non-interactive-emphasis); }
+    .cat-item span { font-size: var(--text-xs); font-weight: 500; color: var(--color-non-interactive-predominant); }
     .outlet-block { padding: 0 var(--space-4) var(--space-4); }
-    .outlet-block h2 { margin: 0 0 var(--space-2); font-family: var(--font-heading); font-size: var(--text-xl); font-weight: 700; }
-    .outlet-block p { margin: 0; color: var(--color-bg-alt-secondary); font-size: var(--text-body-sm); }
+    .outlet-block h2 { margin: 0 0 var(--space-2); font-family: var(--font-heading); font-size: 1.375rem; line-height: var(--lh-xl); font-weight: 700; }
+    .outlet-block p { margin: 0; color: var(--color-non-interactive-predominant); font-size: var(--text-body-sm); font-weight: 400; }
     .product-strip .product-card {
       flex: 0 0 200px;
       border-radius: var(--radius-lg);
       overflow: hidden;
       border: 1px solid var(--color-border-subtle);
       box-shadow: var(--shadow-card);
+      background: var(--color-bg-primary);
     }
     .product-card__media { position: relative; aspect-ratio: 4 / 5; background: #1a1a1a; }
     .product-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .product-card__chips { position: absolute; left: var(--space-2); top: var(--space-2); display: flex; flex-direction: column; gap: 2px; }
     .product-card__chips span { font-size: 10px; font-weight: 700; color: #fff; text-transform: uppercase; font-family: var(--font-heading); }
+    .product-card--hero .product-card__chips {
+      display: none;
+    }
+    .product-card__hero-text {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      align-items: center;
+      justify-items: center;
+      padding: var(--space-4) var(--space-3) var(--space-6);
+      text-align: center;
+      pointer-events: none;
+    }
+    .product-card__hero-eyebrow {
+      align-self: start;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #fff;
+      font-family: var(--font-heading);
+    }
+    .product-card__hero-title {
+      margin: 0;
+      align-self: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .product-card__hero-sub {
+      align-self: end;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.92);
+      font-family: var(--font-body);
+    }
+    .product-card__diamond-tag {
+      position: absolute;
+      top: 10px;
+      right: 8px;
+      z-index: 1;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-tag-diamond-bg);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+    .product-card__diamond-tag span {
+      display: block;
+      line-height: 1;
+      margin-top: 1px;
+    }
+    .product-card__sku {
+      display: block;
+      font-size: var(--text-xs);
+      color: var(--color-placeholder);
+      margin-bottom: var(--space-1);
+    }
+    .product-card__tag-lanc {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      background: var(--color-tag-lancamentos);
+      color: #fff;
+      margin-bottom: var(--space-2);
+    }
+    .product-card__price-row {
+      margin: var(--space-2) 0 0;
+      font-size: var(--text-xs);
+      color: var(--color-non-interactive-predominant);
+    }
+    .product-card__price-row strong {
+      font-weight: 700;
+      margin-right: var(--space-1);
+    }
     .product-card__body { padding: var(--space-3); }
-    .product-card__body h3 { margin: 0; font-size: var(--text-sm); font-weight: 600; font-family: var(--font-heading); }
+    .product-card__body h3 { margin: 0; font-size: var(--text-sm); font-weight: 600; font-family: var(--font-heading); color: var(--color-non-interactive-predominant); }
     .tab-bar {
       margin-top: auto;
       display: flex;
       justify-content: space-around;
       align-items: flex-end;
-      padding: var(--space-2) var(--space-2) max(var(--space-2), env(safe-area-inset-bottom));
+      padding: var(--space-3) var(--space-2) max(var(--space-3), env(safe-area-inset-bottom));
       background: var(--color-bg-primary);
       box-shadow: var(--shadow-up-soft);
       border-top: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
       font-family: var(--font-nav);
     }
     .tab-item {
@@ -232,11 +361,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 4px;
       padding: var(--space-2);
       font-size: 10px;
       font-weight: 500;
-      color: var(--color-bg-alt-secondary);
+      color: var(--color-non-interactive-predominant);
       border: none;
       background: none;
       cursor: default;
@@ -245,7 +374,7 @@
     .tab-item--active { color: var(--color-actionable-default); font-weight: 600; }
     .tab-item--active::after {
       content: "";
-      width: 24px;
+      width: 28px;
       height: 3px;
       border-radius: 2px;
       background: var(--color-actionable-default);
@@ -315,7 +444,7 @@
     .empty-state h2 { font-family: var(--font-heading); font-size: var(--text-xl); margin: 0 0 var(--space-3); }
     .empty-state p { margin: 0; color: var(--color-placeholder); }
     .dsgb-navigation-bar .tab-item { min-height: 48px; justify-content: center; }
-    .dsgb-navigation-bar .tab-item:disabled { opacity: 0.55; }
+    .dsgb-navigation-bar .tab-item:not(.tab-item--active) { opacity: 1; }
     .dsgb-search-field:focus-within { box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-actionable-default) 28%, transparent); }
     .dsgb-icon-button { min-width: 48px; min-height: 48px; border-radius: 24px; position: relative; overflow: hidden; }
     .dsgb-icon-button::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.15s ease; background: currentColor; }
@@ -333,12 +462,9 @@
       <div class="screen-scroll">
         <header class="dsgb-app-bar">
         <div class="status-bar">
-          <span>9:30</span>
-          <div class="status-bar__icons" aria-hidden="true">
-            <img src="https://www.figma.com/api/mcp/asset/697a5449-0934-4c3f-a5c3-cb4f2b251eb8" alt="" />
-            <img src="https://www.figma.com/api/mcp/asset/4bb213e2-ffa7-458a-b41b-57f67b6aa61b" alt="" />
-            <img src="https://www.figma.com/api/mcp/asset/18e1d770-68ae-4ac4-a4b9-a624d7354c89" alt="" />
-          </div>
+          <span class="status-bar__time">9:30</span>
+          <div class="status-bar__notch" aria-hidden="true"></div>
+          <div class="status-bar__icons" aria-hidden="true"></div>
         </div>
         <div class="top-row">
           <button type="button" class="btn-icon dsgb-icon-button" id="home-back-btn" aria-label="Voltar" style="margin-right:auto">
@@ -361,10 +487,10 @@
         </button>
         </header>
         <div class="h-scroll" aria-label="Atalhos">
-          <div class="quick-card dsgb-card"><img src="https://www.figma.com/api/mcp/asset/fc363d83-2cec-4a20-b287-1c61bf1bc12a" alt="" /><p>Ciclos</p></div>
-          <div class="quick-card quick-card--tag dsgb-card"><span class="quick-card__badge">estendido</span><img src="https://www.figma.com/api/mcp/asset/d98c34d9-7fa1-4a07-946f-539984a402b9" alt="" /><p>Pedidos</p></div>
+          <div class="quick-card quick-card--tag dsgb-card"><span class="quick-card__badge">estendido</span><img src="https://www.figma.com/api/mcp/asset/fc363d83-2cec-4a20-b287-1c61bf1bc12a" alt="" /><p>Ciclos</p></div>
           <div class="quick-card dsgb-card"><img src="https://www.figma.com/api/mcp/asset/2bd3a726-76e5-4201-ae3d-970461b4ae77" alt="" /><p>Crédito</p></div>
           <div class="quick-card dsgb-card"><img src="https://www.figma.com/api/mcp/asset/9f9cd203-1aee-4550-8664-f4a62dcc57d7" alt="" /><p>Pagamentos</p></div>
+          <div class="quick-card dsgb-card"><img src="https://www.figma.com/api/mcp/asset/d98c34d9-7fa1-4a07-946f-539984a402b9" alt="" /><p>Pedidos</p></div>
         </div>
         <div class="cat-row h-scroll" aria-label="Categorias">
           <div class="cat-item"><div class="cat-circle"><img src="https://www.figma.com/api/mcp/asset/9ff5c20d-8fff-4774-b829-317f03117157" alt="" /></div><span>Promo</span></div>
@@ -378,16 +504,28 @@
           <p>Confira as condições de parcelamento conforme a sua faixa de revendedora.</p>
         </div>
         <div class="h-scroll product-strip" aria-label="Destaques">
-          <article class="product-card dsgb-card">
+          <article class="product-card product-card--hero dsgb-card">
             <div class="product-card__media">
               <img src="https://www.figma.com/api/mcp/asset/2b56aee6-5d27-4ee9-9397-d4d561e7a866" alt="Her Code" />
               <div class="product-card__chips"><span>Fragrância</span><span>AMADEIRADA</span><span>GOURMAND</span></div>
+              <div class="product-card__hero-text">
+                <span class="product-card__hero-eyebrow">Fragrância</span>
+                <h3 class="product-card__hero-title">AMADEIRADA<br />GOURMAND</h3>
+                <span class="product-card__hero-sub">Combinação do Código Secreto</span>
+              </div>
             </div>
-            <div class="product-card__body"><h3>Combinação do Código Secreto</h3></div>
           </article>
-          <article class="product-card dsgb-card">
-            <div class="product-card__media"><img src="https://www.figma.com/api/mcp/asset/3d3002e6-7c44-4357-b3a6-19cd47573ca8" alt="Egeo" /></div>
-            <div class="product-card__body"><h3>Egeo — colônia desodorante</h3></div>
+          <article class="product-card product-card--listing dsgb-card">
+            <div class="product-card__media">
+              <div class="product-card__diamond-tag" aria-hidden="true"><span>7.609</span></div>
+              <img src="https://www.figma.com/api/mcp/asset/3d3002e6-7c44-4357-b3a6-19cd47573ca8" alt="Boticário" />
+            </div>
+            <div class="product-card__body">
+              <span class="product-card__sku">85067</span>
+              <span class="product-card__tag-lanc">Lançamentos</span>
+              <h3>Boticário — Loção Desodorante C...</h3>
+              <p class="product-card__price-row"><strong>Pague</strong> <span>Revenda</span></p>
+            </div>
           </article>
           <article class="product-card dsgb-card">
             <div class="product-card__media"><img src="https://www.figma.com/api/mcp/asset/269d66ba-09bf-4fa6-a364-eb14667aac8e" alt="Nativa Spa" /></div>
@@ -396,11 +534,11 @@
         </div>
       </div>
       <nav class="tab-bar dsgb-navigation-bar" aria-label="Navegação principal">
-        <button type="button" class="tab-item tab-item--active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-7H10v7H5a1 1 0 0 1-1-1v-9.5z"/></svg>Início</button>
-        <button type="button" class="tab-item" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M8 3v4M16 3v4"/></svg>Conteúdos</button>
-        <button type="button" class="tab-item" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>Gestão</button>
-        <button type="button" class="tab-item" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Pedidos</button>
-        <button type="button" class="tab-item" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Menu</button>
+        <button type="button" class="tab-item tab-item--active" aria-current="page"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 3L4 9v12h6v-7h4v7h6V9l-8-6z"/></svg>Início</button>
+        <button type="button" class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v14H4z"/><path d="M8 3v4M16 3v4"/></svg>Conteúdos</button>
+        <button type="button" class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>Gestão</button>
+        <button type="button" class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Pedidos</button>
+        <button type="button" class="tab-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Menu</button>
       </nav>
     </section>
     <section data-screen="search-empty" id="screen-search-empty" style="display:none">
